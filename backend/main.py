@@ -86,7 +86,7 @@ client = InferenceClient(token=HF_TOKEN)
 @app.post("/predict")
 async def predict_quality(data: WineData):
     try:
-        # 1. 特徵準備（修正：用 numpy array 確保格式）
+        # 1. 特徵準備
         import numpy as np
         features = np.array([[
             data.fixed_acidity, data.volatile_acidity, data.citric_acid,
@@ -95,7 +95,7 @@ async def predict_quality(data: WineData):
             data.sulphates, data.alcohol
         ]])
 
-        # 2. ML 預測品質（修正：加錯誤處理，避免 -1）
+        # 2. ML 預測品質
         if model is not None:
             pred = model.predict(features)[0]
             quality = max(3, min(10, int(round(pred))))  # 限制在 3-10，避免異常
@@ -103,11 +103,11 @@ async def predict_quality(data: WineData):
         else:
             quality = 6
 
-        # 3. LLM 生成解釋（修正：用 conversational task + 新模型）
+        # 3. LLM 生成解釋
         prompt = f"You are a professional sommelier. Explain this wine in 1-2 elegant sentences: Quality {quality}/10, Alcohol {data.alcohol}%, Acidity {data.fixed_acidity}, Sugar {data.residual_sugar}g/L, pH {data.pH}."
 
         try:
-            # 換模型：Llama-3.2-1B-Instruct (支援 text-gen + conversational)
+            # 換模型：Llama-3.2-1B-Instruct
             llm_response = client.conversational(
                 model="meta-llama/Llama-3.2-1B-Instruct",  # 免費、快速、支援 instruct
                 messages=[{"role": "user", "content": prompt}],
