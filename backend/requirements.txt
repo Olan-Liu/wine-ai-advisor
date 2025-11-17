@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+xgboost
+joblib
+huggingface_hub
+python-dotenv
+numpy

@@ -1,0 +1,20 @@
+# 環境變數
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# 模型與資料
+backend/model.pkl
+backend/*.csv
+backend/*.pkl
+
+# Docker
+*.log
+
+# IDE
+.vscode/
+.idea/
